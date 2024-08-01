@@ -34,6 +34,7 @@ class NCFModel(BaseModel):
         users_val: np.ndarray = None,
         movies_val: np.ndarray = None,
         ratings_val: np.ndarray = None,
+        cleora_embeddings_path: str = None
     ) -> None:
         """
         Fits the model to the given data.
@@ -45,9 +46,10 @@ class NCFModel(BaseModel):
             users_val: The user ids of the validation data used for validation during training.
             movies_val: The movie ids of the validation data used for validation during training.
             ratings_val: The ratings of the validation data used for validation during training.
+            cleora_embeddings_path: path to cleora embeddings
         """
         # reset model
-        self.model = NCF(self.num_users, self.num_movies, add_cleora=self.add_cleora).to(self.device)
+        self.model = NCF(self.num_users, self.num_movies, cleora_embeddings_path=cleora_embeddings_path).to(self.device)
         train_data = np.column_stack((users_train, movies_train))
         train_labels = ratings_train.reshape(-1, 1)
         train_dataset = CustomDataset(train_data, train_labels)
